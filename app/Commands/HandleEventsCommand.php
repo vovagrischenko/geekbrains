@@ -34,13 +34,13 @@ class HandleEventsCommand extends Command
 
         $events = $event->select();
 
-        $eventSender = new EventSender();
+        $eventSender = new EventSender(new TelegramApiImpl($this->app->env('TELEGRAM_TOKEN')));
 
         foreach ($events as $event) {
 
             if ($this->shouldEventBeRan($event)) {
 
-                $eventSender->sendMessage($event->receiverId, $event->text);
+                $eventSender->sendMessage($event->receiver_id, $event->text);
 
             }
 
