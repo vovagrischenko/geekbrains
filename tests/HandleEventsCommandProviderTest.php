@@ -17,7 +17,7 @@ class HandleEventsCommandTest extends TestCase
 		self::assert($result, $shouldEventBeRan);
 	}
 
-	public static function eventDtoDataProvider(): array
+	public static function eventDataProvider(): array
 	{
 		return [
 			[

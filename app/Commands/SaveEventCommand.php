@@ -2,6 +2,9 @@
 
 namespace App\Commands;
 
+use App\Actions\Cron;
+use App\Actions\EventSaver;
+use App\Excepions\WrongCronString;
 use App\Application;
 use App\Database\SQLite;
 use App\Models\Event;
@@ -16,22 +19,17 @@ class SaveEventCommand extends Command
     public function __construct(Application $app)
 
     {
-
         $this->app = $app;
-
     }
+
     public function run(array $options  = []): void
 
     {
-
         $options = $this->getGetoptOptionValues();
 
         if ($this->isNeedHelp($options)) {
-
             $this->showHelp();
-
             return;
-
         }
 
         $cronValues = $this->getCronValues($options['cron']);
@@ -64,7 +62,10 @@ class SaveEventCommand extends Command
 
         ];
 
-        $this->saveEvent($params);
+        $eventModel = new Event(new SQLite($this->app));
+        $eventSaver = new EventSaver($eventModel);
+        $eventSaver->handle($params);
+
 
     }
 
